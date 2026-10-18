@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f5f1">
+  <meta name="description" content="Convierte tus imágenes a PDF gratis. Ordena, gira y ajusta tus páginas sin subir tus archivos a un servidor.">
+  <title>Convertidor · Imágenes a PDF</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/styles.css">
+  <script defer src="./assets/vendor/pdf-lib.min.js"></script>
+  <script type="module" src="./assets/app.js"></script>
+</head>
+<body>
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></symbol>
+    <symbol id="i-turn" viewBox="0 0 24 24"><path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </defs></svg>
+
+  <header class="header shell">
+    <a class="brand" href="./" aria-label="Convertidor, inicio"><span class="brand-mark"><svg><use href="#i-image"/></svg><span class="brand-dot"></span></span>convertidor<span class="brand-period">.</span></a>
+    <span class="header-label">PEQUEÑAS HERRAMIENTAS, GRANDES IDEAS</span>
+    <span class="privacy-badge"><span></span>100% en tu dispositivo</span>
+  </header>
+
+  <main class="shell">
+    <section class="intro" aria-labelledby="page-title">
+      <span class="eyebrow">DE IMÁGENES A DOCUMENTO</span>
+      <h1 id="page-title">Tus imágenes.<br>Un solo <span class="pdf-word">PDF<svg viewBox="0 0 160 12" aria-hidden="true"><path d="M3 8Q80-2 157 6"/></svg></span>.</h1>
+      <p>Reúne tus fotos, apuntes o capturas en un documento.<br class="desktop-break"> Sin registros, sin complicaciones y sin subir tus archivos.</p>
+      <div class="steps" aria-label="Cómo funciona"><span><b>01</b> Añade imágenes</span><i></i><span><b>02</b> Ponlas en orden</span><i></i><span><b>03</b> Descarga tu PDF</span></div>
+    </section>
+
+    <div class="workspace">
+      <section class="images-panel" aria-labelledby="images-heading">
+        <div class="section-heading"><div><span class="eyebrow">TU ESPACIO DE TRABAJO</span><h2 id="images-heading">Imágenes <span id="image-count" class="count">0</span></h2></div><button id="clear-all" class="text-button danger" hidden>Quitar todas</button></div>
+        <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple hidden>
+        <div id="dropzone" class="dropzone">
+          <div class="upload-illustration" aria-hidden="true"><span class="back-sheet"></span><span class="front-sheet"><svg><use href="#i-image"/></svg></span><span class="upload-circle"><svg><use href="#i-plus"/></svg></span></div>
+          <h3>Un buen PDF empieza aquí</h3>
+          <p>Arrastra tus imágenes a este espacio</p>
+          <button id="select-images" class="button button-dark"><svg><use href="#i-plus"/></svg>Elegir imágenes</button>
+          <span class="file-hint">JPG, PNG y WebP · Hasta 50 MB por imagen</span>
+        </div>
+        <div id="list-toolbar" class="list-toolbar" hidden><p>Arrastra para ordenar o usa las flechas.</p><button id="add-more" class="text-button"><svg><use href="#i-plus"/></svg>Añadir más</button></div>
+        <ol id="image-list" class="image-list" aria-label="Imágenes en el orden del PDF"></ol>
+        <div class="privacy-note"><svg><use href="#i-lock"/></svg><p><strong>Lo tuyo se queda contigo.</strong> La conversión ocurre en tu navegador. Tus imágenes no se envían a ningún servidor.</p></div>
+        <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+      </section>
+
+      <aside class="settings-panel" aria-labelledby="settings-heading">
+        <div class="settings-title"><h2 id="settings-heading">A tu medida</h2><span class="settings-tag">PDF</span></div>
+        <div class="preview-area" aria-hidden="true"><div id="page-preview" class="page-preview"><div id="preview-image"><svg><use href="#i-image"/></svg></div></div><span id="preview-caption">A4 · Vertical</span></div>
+        <form id="settings-form">
+          <label for="page-size">Tamaño de página</label>
+          <select id="page-size"><option value="a4">A4 · 210 × 297 mm</option><option value="letter">Carta · 216 × 279 mm</option><option value="original">Ajustar a cada imagen</option></select>
+          <label for="orientation">Orientación</label>
+          <select id="orientation"><option value="portrait">Vertical</option><option value="landscape">Horizontal</option><option value="auto">Automática según la imagen</option></select>
+          <div class="settings-row"><div><label for="margin">Márgenes</label><select id="margin"><option value="0">Sin margen</option><option value="10" selected>10 mm</option><option value="20">20 mm</option></select></div><div><label for="quality">Calidad</label><select id="quality"><option value="compact">Ligera</option><option value="balanced" selected>Equilibrada</option><option value="high">Alta</option></select></div></div>
+          <label for="filename">Nombre del archivo</label><div class="filename-input"><input id="filename" type="text" value="mis-imagenes" maxlength="100" autocomplete="off" aria-describedby="filename-hint"><span>.pdf</span></div>
+          <p id="filename-hint" class="input-hint">Una imagen por página, en el orden que elijas.</p>
+          <div class="export-summary"><span id="summary">Todo listo para empezar</span><span id="size-summary">0 imágenes</span></div>
+          <button id="convert" class="button button-primary" type="submit" disabled><svg><use href="#i-download"/></svg><span>Crear y descargar PDF</span><svg class="end-arrow"><use href="#i-arrow"/></svg></button>
+          <div id="progress-area" hidden><progress id="export-progress" max="100" value="0" aria-label="Progreso de conversión"></progress><p id="progress-text" role="status">Preparando documento…</p></div>
+        </form>
+        <p class="settings-footer"><svg><use href="#i-check"/></svg>Gratis. Sin marcas de agua.</p>
+      </aside>
+    </div>
+
+    <section class="bottom-note"><span class="little-star" aria-hidden="true">✳</span><p>Menos archivos sueltos.<br><strong>Más orden en tus ideas.</strong></p><span>HECHO PARA HACERLO FÁCIL</span></section>
+  </main>
+  <footer class="footer shell"><span>convertidor.</span><p>Una herramienta sencilla para tu día a día.</p><a href="https://github.com/SebasMinda/Convertidor" target="_blank" rel="noopener noreferrer">Ver en GitHub <span aria-hidden="true">↗</span></a></footer>
+</body>
+</html>
