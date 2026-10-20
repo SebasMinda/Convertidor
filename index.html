@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f5f1">
-  <meta name="description" content="Convierte tus imágenes a PDF gratis. Ordena, gira y ajusta tus páginas sin subir tus archivos a un servidor.">
-  <title>Convertidor · Imágenes a PDF</title>
+  <meta name="description" content="Convierte imágenes y DOCX a PDF o comprime tus PDF. Herramientas gratis que procesan los archivos en tu dispositivo.">
+  <title>Convertidor · Tus herramientas PDF</title>
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./assets/styles.css">
   <script defer src="./assets/vendor/pdf-lib.min.js"></script>
   <script type="module" src="./assets/app.js"></script>
+  <script type="module" src="./assets/tools.js"></script>
 </head>
 <body>
   <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -34,11 +35,19 @@
 
   <main class="shell">
     <section class="intro" aria-labelledby="page-title">
-      <span class="eyebrow">DE IMÁGENES A DOCUMENTO</span>
-      <h1 id="page-title">Tus imágenes.<br>Un solo <span class="pdf-word">PDF<svg viewBox="0 0 160 12" aria-hidden="true"><path d="M3 8Q80-2 157 6"/></svg></span>.</h1>
-      <p>Reúne tus fotos, apuntes o capturas en un documento.<br class="desktop-break"> Sin registros, sin complicaciones y sin subir tus archivos.</p>
-      <div class="steps" aria-label="Cómo funciona"><span><b>01</b> Añade imágenes</span><i></i><span><b>02</b> Ponlas en orden</span><i></i><span><b>03</b> Descarga tu PDF</span></div>
+      <span class="eyebrow">TUS DOCUMENTOS, MÁS FÁCIL</span>
+      <h1 id="page-title">Todo empieza.<br>Con un <span class="pdf-word">PDF<svg viewBox="0 0 160 12" aria-hidden="true"><path d="M3 8Q80-2 157 6"/></svg></span>.</h1>
+      <p>Convierte imágenes y documentos o aligera tus PDF.<br class="desktop-break"> Sin registros, sin complicaciones y sin subir tus archivos.</p>
     </section>
+
+    <div class="tool-tabs" role="tablist" aria-label="Herramientas PDF">
+      <button id="tab-images" role="tab" aria-selected="true" aria-controls="panel-images" tabindex="0">Imágenes a PDF</button>
+      <button id="tab-docx" role="tab" aria-selected="false" aria-controls="panel-docx" tabindex="-1">DOCX a PDF</button>
+      <button id="tab-compress" role="tab" aria-selected="false" aria-controls="panel-compress" tabindex="-1">Comprimir PDF</button>
+    </div>
+
+    <section id="panel-images" class="tool-panel" role="tabpanel" aria-labelledby="tab-images">
+      <div class="steps" aria-label="Cómo funciona"><span><b>01</b> Añade imágenes</span><i></i><span><b>02</b> Ponlas en orden</span><i></i><span><b>03</b> Descarga tu PDF</span></div>
 
     <div class="workspace">
       <section class="images-panel" aria-labelledby="images-heading">
@@ -75,6 +84,68 @@
         <p class="settings-footer"><svg><use href="#i-check"/></svg>Gratis. Sin marcas de agua.</p>
       </aside>
     </div>
+    </section>
+
+    <section id="panel-docx" class="tool-panel" role="tabpanel" aria-labelledby="tab-docx" hidden>
+      <div class="steps"><span><b>01</b> Elige un DOCX</span><i></i><span><b>02</b> Revisa tu documento</span><i></i><span><b>03</b> Guarda como PDF</span></div>
+      <div class="workspace">
+        <div class="images-panel">
+          <div class="section-heading"><div><span class="eyebrow">DE WORD A PDF</span><h2>Tu documento</h2></div><button id="docx-remove" class="text-button danger" hidden>Quitar archivo</button></div>
+          <input id="docx-input" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+          <div id="docx-drop" class="dropzone file-drop">
+            <span class="document-icon" aria-hidden="true">W</span>
+            <h3>Tu documento, listo para compartir</h3><p>Arrastra un archivo de Word aquí</p>
+            <button id="docx-select" class="button button-dark">Elegir documento</button>
+            <span class="file-hint">DOCX · Hasta 25 MB · No admite .doc</span>
+          </div>
+          <div id="docx-file" class="selected-file" hidden><span class="file-type">DOCX</span><div><strong id="docx-name"></strong><span id="docx-size"></span></div></div>
+          <div id="docx-status" class="message" role="status" aria-live="polite" hidden></div>
+          <div id="docx-preview-box" class="document-preview" hidden><div class="preview-heading"><span>VISTA PREVIA</span><span>Desliza para revisar</span></div><iframe id="docx-preview" title="Vista previa del documento Word" sandbox="allow-same-origin allow-modals" referrerpolicy="no-referrer"></iframe></div>
+          <div class="privacy-note"><svg><use href="#i-lock"/></svg><p><strong>Tu documento se queda contigo.</strong> El archivo se prepara en este navegador y no se envía a ningún servidor.</p></div>
+        </div>
+        <aside class="settings-panel">
+          <div class="settings-title"><h2>Texto nítido</h2><span class="settings-tag">DOCX → PDF</span></div>
+          <p class="tool-description">Conserva el texto seleccionable y prepara imágenes, tablas y estilos para guardar el documento como PDF.</p>
+          <ol class="instructions"><li>Elige tu archivo y revisa la vista previa.</li><li>Pulsa <strong>Guardar como PDF</strong>.</li><li>En la ventana de impresión, elige <strong>Guardar como PDF</strong> como destino y guarda el archivo.</li></ol>
+          <p class="tool-notice">Usa escala 100 %, márgenes predeterminados y desactiva los encabezados y pies del navegador. Los diseños complejos, fuentes no instaladas y la paginación pueden variar respecto a Word.</p>
+          <button id="docx-print" class="button button-primary" disabled><svg><use href="#i-download"/></svg>Guardar como PDF</button>
+          <p class="settings-footer"><svg><use href="#i-check"/></svg>Sin convertir el texto en una imagen.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="panel-compress" class="tool-panel" role="tabpanel" aria-labelledby="tab-compress" hidden>
+      <div class="steps"><span><b>01</b> Elige un PDF</span><i></i><span><b>02</b> Ajusta la calidad</span><i></i><span><b>03</b> Descarga más ligero</span></div>
+      <div class="workspace">
+        <div class="images-panel">
+          <div class="section-heading"><div><span class="eyebrow">MENOS PESO, MÁS ESPACIO</span><h2>Comprime tu PDF</h2></div><button id="compress-remove" class="text-button danger" hidden>Quitar archivo</button></div>
+          <input id="compress-input" type="file" accept=".pdf,application/pdf" hidden>
+          <div id="compress-drop" class="dropzone file-drop"><span class="document-icon pdf-icon" aria-hidden="true">PDF</span><h3>Más fácil de enviar</h3><p>Arrastra tu PDF a este espacio</p><button id="compress-select" class="button button-dark">Elegir PDF</button><span class="file-hint">PDF · Hasta 100 MB y 250 páginas</span></div>
+          <div id="compress-file" class="selected-file" hidden><span class="file-type">PDF</span><div><strong id="compress-name"></strong><span id="compress-size"></span></div></div>
+          <div id="compress-status" class="message" role="status" aria-live="polite" hidden></div>
+          <div id="compress-result" class="compression-result" hidden>
+            <span class="eyebrow">TU RESULTADO</span><h3 id="compress-saving"></h3>
+            <div class="size-comparison"><div><span>ORIGINAL</span><strong id="compress-before"></strong></div><span aria-hidden="true">→</span><div><span>RESULTADO</span><strong id="compress-after"></strong></div></div>
+            <p id="compress-result-note"></p>
+            <a id="compress-download" class="button button-dark" download><svg><use href="#i-download"/></svg><span>Descargar PDF</span></a>
+          </div>
+          <div class="privacy-note"><svg><use href="#i-lock"/></svg><p><strong>La calidad la decides tú.</strong> Los archivos se procesan página por página en tu dispositivo. El resultado depende del contenido y de si el PDF ya estaba comprimido.</p></div>
+        </div>
+        <aside class="settings-panel">
+          <div class="settings-title"><h2>Buen equilibrio</h2><span class="settings-tag">PDF MÁS LIGERO</span></div>
+          <form id="compress-form">
+            <label for="compress-mode">Tipo de compresión</label>
+            <select id="compress-mode"><option value="high" selected>Alta calidad · hasta 180 ppp</option><option value="balanced">Equilibrada · hasta 144 ppp</option><option value="lossless">Sin pérdida · conserva el texto</option></select>
+            <p id="compress-mode-hint" class="tool-notice">Alta calidad: ideal para apuntes escaneados y PDF con fotos. Convierte las páginas en imágenes: el texto deja de ser seleccionable y se pierden los enlaces y formularios. Para conservarlos, elige Sin pérdida.</p>
+            <label for="compress-filename">Nombre del archivo</label><div class="filename-input"><input id="compress-filename" value="documento-comprimido" maxlength="100" autocomplete="off"><span>.pdf</span></div>
+            <p class="input-hint">Si la compresión no reduce el tamaño, podrás descargar el original.</p>
+            <button id="compress-start" type="submit" class="button button-primary" disabled>Comprimir PDF</button>
+            <div id="compress-progress-box" hidden><progress id="compress-progress" max="100" value="0" aria-label="Progreso de compresión"></progress><p id="compress-progress-text" class="progress-label" role="status"></p><button id="compress-cancel" type="button" class="text-button danger">Cancelar</button></div>
+          </form>
+          <p class="settings-footer"><svg><use href="#i-check"/></svg>Sin marcas de agua ni archivos más pesados.</p>
+        </aside>
+      </div>
+    </section>
 
     <section class="bottom-note"><span class="little-star" aria-hidden="true">✳</span><p>Menos archivos sueltos.<br><strong>Más orden en tus ideas.</strong></p><span>HECHO PARA HACERLO FÁCIL</span></section>
   </main>
