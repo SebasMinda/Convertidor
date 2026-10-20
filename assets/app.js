@@ -89,6 +89,7 @@ function reorder(from, to, focusIndex) {
 }
 
 function render() {
+  document.querySelectorAll('[role="tab"]').forEach((tab) => { tab.disabled = busy; });
   const count = images.length;
   $('image-count').textContent = count;
   $('clear-all').hidden = !count;
@@ -287,6 +288,7 @@ $('dropzone').addEventListener('drop', (event) => { event.preventDefault(); drag
 window.addEventListener('dragover', (event) => { if ([...event.dataTransfer.types].includes('Files')) event.preventDefault(); });
 window.addEventListener('drop', (event) => { if ([...event.dataTransfer.types].includes('Files')) event.preventDefault(); });
 document.addEventListener('paste', (event) => {
+  if ($('panel-images').hidden) return;
   if (busy || ['INPUT', 'TEXTAREA'].includes(event.target.tagName)) return;
   const files = [...(event.clipboardData?.files || [])];
   if (files.length) { event.preventDefault(); addFiles(files); }
